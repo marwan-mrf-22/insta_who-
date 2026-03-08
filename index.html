@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل إنستغرام المتقدم 👨‍💻</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #1c1e21;
+            --card-bg: #ffffff;
+            --primary-color: #0095f6;
+            --danger-color: #ed4956;
+            --success-color: #28a745;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e4e6eb;
+            --card-bg: #242526;
+            --shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-toggle {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn-analyze {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        .results {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        .stat-box {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .pros { color: var(--success-color); font-weight: bold; }
+        .cons { color: var(--danger-color); font-weight: bold; }
+
+        .consult-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <div class="app-container">
+        <div class="header-controls">
+            <button class="btn-toggle" onclick="toggleTheme()">🌓 المظهر</button>
+            <button class="btn-toggle" onclick="toggleLang()">🌐 AR/EN</button>
+        </div>
+
+        <h2 style="text-align: center; margin-bottom: 20px;" id="title">محلل الحسابات 🕵️‍♂️</h2>
+
+        <div class="input-group">
+            <input type="text" id="username" placeholder="أدخل يوزر إنستغرام (بدون @)">
+            <button class="btn-analyze" onclick="analyzeAccount()" id="analyzeBtn">بدء التحليل 🚀</button>
+        </div>
+
+        <div class="results" id="resultsArea">
+            <div class="stat-box">
+                <p><strong>الاسم:</strong> <span id="resName">---</span></p>
+                <p><strong>اليوزر:</strong> <span id="resUser">---</span></p>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <div class="stat-box" style="flex: 1; text-align: center;">
+                    <p>متابعين 👥</p>
+                    <h3 id="resFollowers">---</h3>
+                </div>
+                <div class="stat-box" style="flex: 1; text-align: center;">
+                    <p>يتابع 🚶‍♂️</p>
+                    <h3 id="resFollowing">---</h3>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <p class="pros">✅ المميزات:</p>
+                <p id="resPros">جاري التحليل...</p>
+            </div>
+
+            <div class="stat-box">
+                <p class="cons">⚠️ السلبيات:</p>
+                <p id="resCons">جاري التحليل...</p>
+            </div>
+        </div>
+
+        <a href="https://instagram.com/m.rf0.9" target="_blank" class="consult-btn" id="consultBtn">💬 استشارتنا</a>
+    </div>
+
+    <script>
+        // تفعيل وإلغاء الوضع الليلي
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // محاكاة تغيير اللغة (يمكنك تطويرها لاحقاً)
+        let isArabic = true;
+        function toggleLang() {
+            isArabic = !isArabic;
+            document.getElementById('title').innerText = isArabic ? "محلل الحسابات 🕵️‍♂️" : "Account Analyzer 🕵️‍♂️";
+            document.getElementById('username').placeholder = isArabic ? "أدخل يوزر إنستغرام (بدون @)" : "Enter IG Username (no @)";
+            document.getElementById('analyzeBtn').innerText = isArabic ? "بدء التحليل 🚀" : "Start Analysis 🚀";
+            document.getElementById('consultBtn').innerText = isArabic ? "💬 استشارتنا" : "💬 Consult Us";
+        }
+
+        // محاكاة عملية التحليل
+        function analyzeAccount() {
+            const username = document.getElementById('username').value.trim();
+            if(!username) {
+                alert(isArabic ? "الرجاء إدخال يوزرنيم أولاً! 🛑" : "Please enter a username first! 🛑");
+                return;
+            }
+
+            document.getElementById('resultsArea').style.display = 'block';
+            document.getElementById('analyzeBtn').innerText = "جاري الفحص... ⚙️";
+
+            // محاكاة وقت التحميل (2 ثانية) لجعل الأمر يبدو واقعياً
+            setTimeout(() => {
+                // وضع بيانات وهمية للعرض (يمكنك لاحقاً جلبها عبر API باستخدام بايثون)
+                document.getElementById('resName').innerText = "مستخدم إنستغرام";
+                document.getElementById('resUser').innerText = "@" + username;
+                document.getElementById('resFollowers').innerText = Math.floor(Math.random() * 50000) + "K";
+                document.getElementById('resFollowing').innerText = Math.floor(Math.random() * 1000);
+                
+                document.getElementById('resPros').innerText = isArabic ? "معدل نشر مستمر، بايو منسق بشكل جيد." : "Consistent posting, well-formatted bio.";
+                document.getElementById('resCons').innerText = isArabic ? "تفاعل المتابعين منخفض مقارنة بالعدد، استخدام هاشتاجات مكررة." : "Low engagement rate, repetitive hashtags.";
+                
+                document.getElementById('analyzeBtn').innerText = isArabic ? "إعادة التحليل 🔄" : "Re-analyze 🔄";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+ 
